@@ -6,6 +6,11 @@ import { buildCalendar, ptbrMonths, ptbrWeekdays } from "@/lib/calendar-utils";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { MouseEvent, useMemo, useRef, useState } from "react";
 
+type Props = {
+  label: string;
+  className?: string;
+} & React.InputHTMLAttributes<HTMLInputElement>
+
 interface CalendarValue {
   day: number;
   month: number;
@@ -15,10 +20,12 @@ const now = new Date()
 const TODAY = now.getDay()
 const CURRENT_MONTH = now.getMonth()
 const CURRENT_YEAR = now.getFullYear()
-export default function DatePicker() {
+
+export default function DatePicker({ label, className = "", ...props }: Props) {
   const [day, setDay] = useState(TODAY)
   const [month, setMonth] = useState(CURRENT_MONTH)
   const [year, setYear] = useState(CURRENT_YEAR)
+  
   const [inputDate, setInputDate] = useState('')
 
   const [open, setOpen] = useState(false)
@@ -73,11 +80,14 @@ export default function DatePicker() {
 
     if (onlyDigitsInput.length === 10) {
       const [day, month, year] = onlyDigitsInput.split('/').map(Number)
-      selectDate({ day, month, year })
+      setDay(day)
+      setMonth(month)
+      setYear(year)
     }
   }
 
   function selectDate({ day, month, year }: CalendarValue) {
+    console.log(day, month, year)
     setDay(day)
     setMonth(month)
     setYear(year)
@@ -87,22 +97,26 @@ export default function DatePicker() {
   }
 
   return (
-    <label className="relative flex flex-col">
-      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"/>
-      <input
-        ref={triggerRef}
-        type="text" 
-        placeholder="dd/mm/yyy" 
-        className="flex w-full border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-12 h-14 rounded-xl border-slate-200 focus:border-slate-500 focus:ring-slate-500/20"
-        value={inputDate}
-        onInput={handleDateInput}
-        onMouseDown={() => setOpen(open => !open)}
-      />
+    <label className={["relative flex flex-col gap-2", className].join(" ")}>
+      {label && <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{label}</span>}
+      <div className="relative w-full">
+        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"/>
+        <input
+          {...props}
+          ref={triggerRef}
+          type="text" 
+          placeholder="DD/MM/YYYY" 
+          className="flex w-full border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-12 h-13 rounded-xl border-slate-200 focus:border-slate-500 focus:ring-slate-500/20"
+          value={inputDate}
+          onInput={handleDateInput}
+          onMouseDown={() => setOpen(open => !open)}
+        />
+      </div>
       { open && 
         <div
           ref={pickerRef}
           className={[
-            "absolute w-full max-w-xl flex flex-col gap-3 p-4 space-y-3 rounded-2xl bg-white shadow-sm border border-slate-200",
+            "absolute w-full max-w-xl min-w-70 flex flex-col gap-3 p-4 space-y-3 rounded-2xl z-10 bg-white shadow-sm border border-slate-200",
             direction === "bottom"
               ? "top-full translate-y-3"
               : "bottom-full -translate-y-3",
@@ -152,7 +166,7 @@ export default function DatePicker() {
                   isDisabled
                     ? "text-slate-300 cursor-default"
                     : "text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400/30 cursor-pointer",
-                  Number(cell.day) === day && CURRENT_MONTH === month ? "bg-slate-600 text-white hover:bg-slate-500" : ""
+                  Number(cell.day) === day && month === cell.month && year === cell.year ? "bg-slate-600 text-white hover:bg-slate-500" : ""
                 ].join(" ")}
                 disabled={isDisabled}
                 onClick={() => selectDate({ day: Number(cell.day), month, year })}
