@@ -7,8 +7,10 @@ type Props = {
   icon?: LucideIcon;
   placeholder?: string;
   error?: FieldError;
+  className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>
-export default function InputTime({ label, placeholder, error, icon: Icon, ...props }: Props) {
+
+export default function InputTime({ label, placeholder, error, icon: Icon, className = "", ...props }: Props) {
   function formatInput(e: MouseEvent<HTMLInputElement>) {
     let value = e.currentTarget.value.replace(/\D/g, "")
 
@@ -19,9 +21,9 @@ export default function InputTime({ label, placeholder, error, icon: Icon, ...pr
     e.currentTarget.value = value
   }
   return (
-    <label className="flex flex-col gap-2">
+    <label className={["flex flex-col gap-2", className].join(" ")}>
       {label && <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{label}</span>}
-      <div className="relative">
+      <div className="relative w-full">
         {Icon && <Icon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"/>}
         <input
           {...props}
