@@ -18,14 +18,15 @@ interface Handlers {
   onSelect: (selected: Option) => void
 }
 type SelectParams = Props & Handlers
-export default function Select({ label, options, selected = DEFAULT_SELECTED }: SelectParams) {
+export default function Select({ label, options, selected = DEFAULT_SELECTED, onSelect, }: SelectParams) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
-  function handleClickOnOption(e: MouseEvent<HTMLButtonElement>) {
-    
+  function handleClickOnOption(selected: Option) {
+    onSelect(selected)
+    toggleCombobox()
   }
   function toggleCombobox() {
     setOpen(open => !open)
@@ -64,19 +65,21 @@ export default function Select({ label, options, selected = DEFAULT_SELECTED }: 
         className={[
           "px-2 py-2 flex flex-col absolute bg-white w-full border border-slate-200 rounded-xl shadow-sm max-h-80 overflow-y-auto",
           direction === "bottom"
-            ? "top-full translate-y-3"
-            : "bottom-full -translate-y-3",
+            ? "top-full translate-y-1"
+            : "bottom-full -translate-y-1",
         ].join(" ")}
       >
         {options.map(({ id, text }) => (
           <li
             key={id}
-            className="text-sm hover:bg-slate-200/30 p-1.5 rounded-md" 
             role="listitem"
           >
             <button 
-              className="text-sm hover:bg-slate-200/30 p-1.5 rounded-md"
-              onClick={handleClickOnOption}
+              className="text-sm w-full text-left hover:bg-slate-200/30 p-1.5 rounded-md cursor-pointer"
+              type="button"
+              data-id={id}
+              data-text={text}
+              onClick={() => handleClickOnOption({id, text})}
             >
               {text}
             </button>
