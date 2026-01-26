@@ -1,6 +1,8 @@
 interface CalendarCall {
   day: string | null;
-  isCurrentMonth: boolean
+  month: number | null;
+  year: number | null
+  isCurrentMonth: boolean;
 }
 
 const engWeekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
@@ -52,12 +54,12 @@ function buildCalendar(month: number, year: number): CalendarCall[] {
 
   // Empty cells before day 1
   for (let i = 0, prevMonthDays = totalDayFromPrevMonth; i < firstWeekday; i++, prevMonthDays--) {
-    cells.push({ day: prevMonthDays.toString(), isCurrentMonth: false })
+    cells.push({ day: prevMonthDays.toString(), isCurrentMonth: false, month: month - 1, year: month === 0 ? year - 1 : year, })
   }
 
   // Days of month
   for (let day = 1; day <= totalDays; day++) {
-    cells.push({ day: day.toString().padStart(2, '0'), isCurrentMonth: true })
+    cells.push({ day: day.toString().padStart(2, '0'), isCurrentMonth: true, month, year, })
   }
 
   // fill remaing cells
@@ -65,7 +67,7 @@ function buildCalendar(month: number, year: number): CalendarCall[] {
   while (cells.length < GRID_SIZE) {
     const currentTotalRemainingDays = totalDays - cells.length
     const day = initialTotalRemainingDays - currentTotalRemainingDays + 1
-    cells.push({ day: day.toString().padStart(2, "0"), isCurrentMonth: false });
+    cells.push({ day: day.toString().padStart(2, "0"), isCurrentMonth: false, month: month + 1, year: month === 11 ? year + 1 : year,  });
   }
 
   return cells
