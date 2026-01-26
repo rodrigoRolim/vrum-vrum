@@ -1,3 +1,5 @@
+'use client';
+
 import z from "zod";
 import InputEmail from "@/components/InputEmail";
 import InputText from "@/components/InputText";
@@ -7,6 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { transportRequestSchema } from "@/components/transport-request/schemaPersonalData";
 import { ArrowRight, Building2, Mail, Phone, User } from "lucide-react"
+import InputPhone from "../InputPhone";
 
 type FormData = z.infer<typeof transportRequestSchema>
 
@@ -41,7 +44,7 @@ export default function PersonalDataStep() {
           {...register('name')}
           error={errors.name}
         />
-        <InputText 
+        <InputPhone 
           label="Telefone / Whatsapp *" 
           icon={Phone} 
           placeholder="(00) 00000-0000"
@@ -61,12 +64,6 @@ export default function PersonalDataStep() {
           options={travelOptions} 
           selected={travelOption} 
           onSelect={selectTravelOption}/>
-      </div>
-      <div className="flex pt-4 items-end justify-end w-full">
-        <button 
-          className="inline-flex items-center text-white justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none text-primary-foreground shadow h-9 px-8 py-4 bg-orange-500 hover:bg-orange-600">
-            Continuar <ArrowRight className="size-4" />
-          </button>
       </div>
     </form>
   )
