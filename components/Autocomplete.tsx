@@ -1,22 +1,29 @@
 "use client";
 
-import { LucideIcon, MapIcon, MapPin } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-type Option = { id: string; label: string; }
-const icons: Record<string, LucideIcon> = {
-  MapIcon,
-  MapPin,
-} as const
-type AutocompleteProps = {
-  options: Option[];
-  value?: string;
-  onChange?: (option: Option) => void;
+type BaseOption = { id: string; text: string };
+
+export type ButtonAction = {
+  action: (payload: any) => void;
+  icon: LucideIcon;
+  text?: string;
+}
+type AutocompleteProps<T> = {
+  label?: string;
+  query: string;
+  selected: string;
+  options: T[];
   placeholder?: string;
   minChars?: number;
-  icon: keyof typeof icons;
-  color?: 'orange' | 'blue' | 'green' | 'gray'
-};
+  icon: LucideIcon;
+  color?: 'orange' | 'blue' | 'green' | 'gray';
+  button?: ButtonAction
+  onQuery: (query: string) => void;
+  onSelectOption: (option: T) => void;
+} & React.InputHTMLAttributes<HTMLInputElement>;
+
 const inputColorsMap = {
   orange: 'focus:border-orange-500 focus:ring-orange-500/20',
   green: 'focus:border-green-500 focus:ring-green-500/20',
@@ -30,29 +37,25 @@ const iconColorsMap = {
   gray: 'text-slate-400'
 } as const
 
-export function Autocomplete({
-  options,
-  value = "",
-  onChange,
+export function Autocomplete<T extends BaseOption>({
+  query,
+  selected = "",
+  options = [],
+  label,
   placeholder = "Digite a cidade",
   minChars = 3,
-  icon,
-  color = 'gray'
-}: AutocompleteProps) {
-  const Icon = icons[icon] || null
-
-  const [inputValue, setInputValue] = useState(value);
+  icon: Icon,
+  color = 'gray',
+  button: Button,
+  onQuery,
+  onSelectOption,
+  ...props
+}: AutocompleteProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-
+  
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filteredOptions =
-    inputValue.length >= minChars
-      ? options.filter((option) =>
-          option.label.toLowerCase().includes(inputValue.toLowerCase())
-        )
-      : [];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,20 +72,20 @@ export function Autocomplete({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  function selectCity({ id, label }: Option) {
-    setInputValue(label);
-    onChange?.({ id, label });
+  function selectOption(option: T) {
+    // onQuery(option);
+    onSelectOption(option);
     setIsOpen(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (!isOpen || filteredOptions.length === 0) return;
+    if (!isOpen || options.length === 0) return;
 
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
         setHighlightedIndex((prev) =>
-          Math.min(prev + 1, filteredOptions.length - 1)
+          Math.min(prev + 1, options.length - 1)
         );
         break;
 
@@ -93,8 +96,8 @@ export function Autocomplete({
 
       case "Enter":
         e.preventDefault();
-        if (filteredOptions[highlightedIndex].label) {
-          selectCity(filteredOptions[highlightedIndex]);
+        if (options[highlightedIndex]) {
+          selectOption(options[highlightedIndex]);
         }
         break;
 
@@ -105,60 +108,73 @@ export function Autocomplete({
   }
 
   return (
-    <div ref={containerRef} className="relative w-full">
-      { Icon && <Icon className={`absolute left-4 top-1/2 -translate-y-1/2 ${iconColorsMap[color]}`}/> }
-      <input
-        type="text"
-        value={inputValue}
-        placeholder={placeholder}
-        className={`flex w-full border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-12 h-14 rounded-xl border-slate-200 ${inputColorsMap[color]}`}
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-controls="city-listbox"
-        onChange={(e) => {
-          const value = e.target.value;
-          setInputValue(value);
-          setHighlightedIndex(0);
-          setIsOpen(value.length >= minChars);
-        }}
-        onKeyDown={handleKeyDown}
-        onFocus={() => {
-          if (inputValue.length >= minChars) {
-            setIsOpen(true);
-          }
-        }}
-      />
+    <label className="flex flex-col gap-2">
+      {label && 
+        <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          {label}
+        </span>
+      }
+      <div ref={containerRef} className="relative w-full">
+        {Icon && <Icon className={`absolute left-4 top-1/2 -translate-y-1/2 ${iconColorsMap[color]}`}/>}
+        <input
+          {...props}
+          type="text"
+          value={selected}
+          placeholder={placeholder}
+          className={`flex w-full border bg-transparent pl-12 pr-18 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-14 rounded-xl border-slate-200 ${inputColorsMap[color]}`}
+          role="combobox"
+          aria-expanded={isOpen}
+          aria-controls="city-listbox"
+          onChange={(e) => {
+            const value = e.target.value;
+            onQuery(value);
+            setHighlightedIndex(0);
+            setIsOpen(value.length >= minChars);
+          }}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            if (query.length >= minChars) {
+              setIsOpen(true);
+            }
+          }}
+        />
+        {Button && 
+          <button
+            type="button"
+            className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 items-center text-orange-600 hover:text-orange-800 text-xs font-medium"><Button.icon className="size-5"/>
+            {Button.text}
+          </button>}
+        {isOpen && options.length > 0 && (
+          <ul
+            id="city-listbox"
+            role="listbox"
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white shadow"
+          >
+            {options.map((option, index) => (
+              <li
+                key={option.id}
+                role="option"
+                aria-selected={highlightedIndex === index}
+                className={`cursor-pointer px-3 py-2 ${
+                  highlightedIndex === index
+                    ? "bg-orange-100 text-orange-900"
+                    : "hover:bg-gray-100"
+                }`}
+                onMouseDown={() => selectOption(option)}
+                onMouseEnter={() => setHighlightedIndex(index)}
+              >
+                {option.text}
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {isOpen && filteredOptions.length > 0 && (
-        <ul
-          id="city-listbox"
-          role="listbox"
-          className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white shadow"
-        >
-          {filteredOptions.map((option, index) => (
-            <li
-              key={option.id}
-              role="option"
-              aria-selected={highlightedIndex === index}
-              className={`cursor-pointer px-3 py-2 ${
-                highlightedIndex === index
-                  ? "bg-orange-100 text-orange-900"
-                  : "hover:bg-gray-100"
-              }`}
-              onMouseDown={() => selectCity(option)}
-              onMouseEnter={() => setHighlightedIndex(index)}
-            >
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {isOpen && inputValue.length < minChars && (
-        <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-500 shadow">
-          Type at least {minChars} characters
-        </div>
-      )}
-    </div>
+        {isOpen && query.length < minChars && (
+          <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-500 shadow">
+            Type at least {minChars} characters
+          </div>
+        )}
+      </div>
+    </label>
   );
 }

@@ -6,8 +6,13 @@ type Props = {
   icon: LucideIcon;
   placeholder?: string;
   error?: FieldError;
+  button?: {
+    action: <T>(payload: T) => void;
+    icon: LucideIcon;
+  }
 } & React.InputHTMLAttributes<HTMLInputElement>;
-export default function InputText({ label, icon: Icon, placeholder = "", error, ...props }: Props) {
+
+export default function InputText({ label, icon: Icon, placeholder = "", error, button: Button, ...props }: Props) {
   return (
     <label className="flex flex-col gap-2">
       {label && <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{label}</span>}
@@ -19,6 +24,7 @@ export default function InputText({ label, icon: Icon, placeholder = "", error, 
           className="flex w-full border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-12 h-13 rounded-xl border-slate-200 focus:border-gray-500 focus:ring-slate-500/20"
           placeholder={placeholder}
         />
+        {Button && <button><Button.icon className="absolute right-3 top-3.5 text-orange-600 hover:text-orange-800 text-sm font-medium"/></button>}
       </div>
       {error && <p className="text-sm text-red-500">{error.message}</p>}
     </label>
