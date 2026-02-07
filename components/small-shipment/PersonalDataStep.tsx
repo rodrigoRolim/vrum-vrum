@@ -7,7 +7,7 @@ import Select, { Option } from "@/components/Select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { transportRequestSchema } from "@/components/transport-request/schemaPersonalData";
+import { transportRequestSchema } from "@/components/small-shipment/schemaPersonalData";
 import { ArrowRight, Building2, Mail, Phone, User } from "lucide-react"
 import InputPhone from "../InputPhone";
 

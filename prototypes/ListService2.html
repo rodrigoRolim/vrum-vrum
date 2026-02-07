@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes MultiServiços</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        .service-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-image {
+            height: 160px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-footer {
+            margin-top: auto;
+        }
+        
+        .group:hover .image-hover {
+            transform: scale(1.05);
+        }
+        
+        .image-hover {
+            transition: transform 0.5s ease;
+        }
+        
+        .route-line {
+            width: 2px;
+            height: 16px;
+            margin-left: 5px;
+            background: linear-gradient(to bottom, #cbd5e1, #3b82f6);
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <!-- Grid de Cards -->
+        <div class="cards-grid">
+            
+            <!-- CARD 1: MOTORISTA INDIVIDUAL (Viagem Regular) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="regular" 
+                data-vehicle="microbus"
+                data-operation="individual">
+                
+                <div class="card-image bg-gradient-to-br from-blue-700 to-blue-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-user text-white/20 text-5xl"></i>
+                    </div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900 shadow">
+                            <i class="fas fa-user text-xs"></i> Individual
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-bus"></i> Micro-ônibus
+                        </span>
+                    </div>
+                    
+                    <!-- NOME DO MOTORISTA NO HEADER -->
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">João Silva Transportes</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-5">
+                    <div class="mb-4">
+                        <!-- Título do serviço (agora focado no serviço) -->
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-blue-600 transition-colors mb-2">
+                            Linha Regular SP ↔ Campinas
+                        </h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.9 • 89 avaliações</span>
+                        </div>
+                        
+                        <!-- Rota -->
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                                    <span>São Paulo - Terminal Tietê</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">08:00</span>
+                            </div>
+                            
+                            <div class="ml-1 w-0.5 h-4 bg-gradient-to-b from-gray-300 to-blue-500"></div>
+                            
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                    <span class="font-medium">Campinas - Terminal</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">09:30</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tipo de operação -->
+                    <div class="mb-4 p-3 bg-blue-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-blue-200 flex items-center justify-center">
+                                <i class="fas fa-user text-blue-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Motorista Individual</p>
+                                <p class="text-xs text-gray-600">Proprietário e condutor do veículo • 15 anos de experiência</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalhes -->
+                    <div class="mb-4">
+                        <div class="flex items-center gap-4 text-sm text-gray-700 mb-2">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-users text-gray-400"></i>
+                                <span><span class="font-bold text-green-600">12</span> vagas</span>
+                            </div>
+                            <div class="flex items-center gap-1 text-blue-600">
+                                <i class="fas fa-box text-blue-500"></i>
+                                <span>Aceita encomendas</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preço e Botão -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Por pessoa</p>
+                                <p class="text-2xl font-bold text-orange-600">R$ 45,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Comprar
+                            </button>
+                        </div>
+                        
+                        <!-- Mantemos também no rodapé para clareza -->
+                        <p class="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-200">
+                            Motorista: <span class="font-medium text-gray-600">João Silva</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 2: FROTA PEQUENA (Fretamento Escolar) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="charter" 
+                data-vehicle="van"
+                data-operation="small-fleet">
+                
+                <div class="card-image bg-gradient-to-br from-green-700 to-green-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-shuttle-van text-white/20 text-5xl"></i>
+                    </div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900 shadow">
+                            <i class="fas fa-van-shuttle text-xs"></i> Frota: 4 vans
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-shuttle-van"></i> Van Escolar
+                        </span>
+                    </div>
+                    
+                    <!-- NOME DA EMPRESA NO HEADER -->
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">Carlos Educação Transportes</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-5">
+                    <div class="mb-4">
+                        <!-- Título do serviço -->
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-green-600 transition-colors mb-2">
+                            Transporte Escolar Zona Sul
+                        </h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">5.0 • 42 avaliações</span>
+                        </div>
+                        
+                        <!-- Localização -->
+                        <div class="space-y-3 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-700">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                <span class="font-medium">São Paulo - Zona Sul</span>
+                            </div>
+                            
+                            <!-- Capacidade da frota -->
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-van-shuttle text-gray-400"></i>
+                                    <span>4 vans disponíveis</span>
+                                </div>
+                                <div class="text-gray-700">
+                                    <span class="font-medium">60</span> crianças total
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tipo de operação -->
+                    <div class="mb-4 p-3 bg-green-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-green-200 flex items-center justify-center">
+                                <i class="fas fa-van-shuttle text-green-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Frota Pequena (4 vans)</p>
+                                <p class="text-xs text-gray-600">Capacidade para atender múltiplas escolas simultaneamente</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Horários -->
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-600 space-y-1">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-sun text-amber-400"></i>
+                                <span>Manhã: 7:00 - 12:00</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-cloud-sun text-orange-400"></i>
+                                <span>Tarde: 13:00 - 18:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preço e Botão -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Mensal por criança</p>
+                                <p class="text-2xl font-bold text-orange-600">R$ 300,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Contatar
+                            </button>
+                        </div>
+                        
+                        <!-- Responsável -->
+                        <p class="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-200">
+                            Responsável: <span class="font-medium text-gray-600">Carlos Educação</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 3: FROTA GRANDE (Fretamento Corporativo) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="charter" 
+                data-vehicle="bus"
+                data-operation="large-fleet">
+                
+                <div class="card-image bg-gradient-to-br from-indigo-700 to-indigo-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-bus text-white/20 text-5xl"></i>
+                    </div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900 shadow">
+                            <i class="fas fa-bus text-xs"></i> Frota: 12 veículos
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-bus"></i> Ônibus Executivo
+                        </span>
+                    </div>
+                    
+                    <!-- NOME DA EMPRESA NO HEADER -->
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">Corporate Transport Solutions</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-5">
+                    <div class="mb-4">
+                        <!-- Título do serviço -->
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-indigo-600 transition-colors mb-2">
+                            Transporte Empresarial - Grande Capacidade
+                        </h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.6 • 78 avaliações</span>
+                        </div>
+                        
+                        <!-- Composição da frota -->
+                        <div class="mb-4">
+                            <div class="text-sm text-gray-600 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-bus text-gray-400"></i>
+                                        <span>6 ônibus (40 lugares)</span>
+                                    </div>
+                                    <span class="font-medium">240</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-bus text-gray-400"></i>
+                                        <span>4 micro-ônibus (25 lugares)</span>
+                                    </div>
+                                    <span class="font-medium">100</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-shuttle-van text-gray-400"></i>
+                                        <span>2 vans (15 lugares)</span>
+                                    </div>
+                                    <span class="font-medium">30</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 pt-2 border-t border-gray-200 text-right">
+                                <span class="text-sm font-bold text-gray-900">Total: 370 lugares</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tipo de operação -->
+                    <div class="mb-4 p-3 bg-indigo-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-indigo-200 flex items-center justify-center">
+                                <i class="fas fa-bus text-indigo-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Frota Grande (12 veículos)</p>
+                                <p class="text-xs text-gray-600">Ônibus, micro-ônibus e vans • Capacidade para eventos grandes</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Benefícios -->
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-600 space-y-1">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-wifi text-gray-400"></i>
+                                <span>Todos com Wi-Fi e ar-condicionado</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-user-tie text-gray-400"></i>
+                                <span>Motoristas uniformizados</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preço e Botão -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Contrato empresarial</p>
+                                <p class="text-2xl font-bold text-orange-600">Sob consulta</p>
+                            </div>
+                            <button class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Solicitar Proposta
+                            </button>
+                        </div>
+                        
+                        <!-- Informação adicional -->
+                        <p class="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-200">
+                            Empresa registrada • CNPJ: 12.345.678/0001-90
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 4: EMPRESA (Encomendas) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="delivery" 
+                data-vehicle="car"
+                data-operation="company">
+                
+                <div class="card-image bg-gradient-to-br from-red-700 to-red-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-building text-white/20 text-5xl"></i>
+                    </div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900 shadow">
+                            <i class="fas fa-building text-xs"></i> Empresa
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-truck"></i> Furgões
+                        </span>
+                    </div>
+                    
+                    <!-- NOME DA EMPRESA NO HEADER -->
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">Rápido Entrega Express</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-5">
+                    <div class="mb-4">
+                        <!-- Título do serviço -->
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-red-600 transition-colors mb-2">
+                            Entrega Rápida - Documentos e Encomendas
+                        </h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.3 • 67 avaliações</span>
+                        </div>
+                        
+                        <!-- Área de cobertura -->
+                        <div class="space-y-3 mb-4">
+                            <div class="flex items-start gap-2 text-sm text-gray-700">
+                                <i class="fas fa-map-marked-alt text-gray-400 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium">Cobertura Regional:</p>
+                                    <p class="text-xs text-gray-600">São Paulo e região metropolitana</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-truck text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">8 furgões</p>
+                                        <p class="text-xs text-gray-500">Frota própria</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-clock text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">24h</p>
+                                        <p class="text-xs text-gray-500">Plantão</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tipo de operação -->
+                    <div class="mb-4 p-3 bg-red-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-red-200 flex items-center justify-center">
+                                <i class="fas fa-building text-red-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Empresa Registrada</p>
+                                <p class="text-xs text-gray-600">CNPJ: 12.345.678/0001-90 • 8 veículos na frota</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Serviços -->
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-600 space-y-1">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-warehouse text-gray-400"></i>
+                                <span>Centro de distribuição próprio</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                <span>Rastreamento em tempo real</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preço e Botão -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">A partir de</p>
+                                <p class="text-2xl font-bold text-orange-600">R$ 25,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Solicitar
+                            </button>
+                        </div>
+                        
+                        <!-- Contato -->
+                        <p class="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-200">
+                            Contato: (11) 99999-9999
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 5: EXCURSÃO (Empresa) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="excursions" 
+                data-vehicle="bus"
+                data-operation="company">
+                
+                <div class="card-image bg-gradient-to-br from-purple-700 to-purple-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-mountain text-white/20 text-5xl"></i>
+                    </div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900 shadow">
+                            <i class="fas fa-clock text-xs"></i> 2 dias
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-bus"></i> Ônibus Leito
+                        </span>
+                    </div>
+                    
+                    <!-- NOME DA EMPRESA NO HEADER -->
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">TransTur Brasil</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-5">
+                    <div class="mb-4">
+                        <!-- Título do serviço -->
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors mb-2">
+                            Excursão Religiosa - Aparecida do Norte
+                        </h3>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.8 • 156 avaliações</span>
+                        </div>
+                        
+                        <!-- Rota -->
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                                    <span>São Paulo - SP</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">Saída: 05:00</span>
+                            </div>
+                            
+                            <div class="ml-1 w-0.5 h-4 bg-gradient-to-b from-gray-300 to-purple-500"></div>
+                            
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
+                                    <span class="font-medium">Aparecida - SP</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">Chegada: 09:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tipo de operação -->
+                    <div class="mb-4 p-3 bg-purple-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-purple-200 flex items-center justify-center">
+                                <i class="fas fa-building text-purple-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Agência de Turismo</p>
+                                <p class="text-xs text-gray-600">Frota própria de ônibus • Guias credenciados</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pacote -->
+                    <div class="mb-4">
+                        <p class="text-xs text-gray-500 mb-2">Pacote inclui:</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-50 text-blue-700">
+                                <i class="fas fa-hotel"></i> Hospedagem
+                            </span>
+                            <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-green-50 text-green-700">
+                                <i class="fas fa-utensils"></i> Refeições
+                            </span>
+                            <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-purple-50 text-purple-700">
+                                <i class="fas fa-map-signs"></i> Guia
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Preço e Botão -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Pacote completo</p>
+                                <p class="text-2xl font-bold text-orange-600">R$ 450,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Reservar
+                            </button>
+                        </div>
+                        
+                        <!-- Informação adicional -->
+                        <p class="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-200">
+                            Agência credenciada • 15 anos no mercado
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <script>
+        // Interação básica
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.closest('button')) {
+                    const provider = this.querySelector('.card-image h4').textContent;
+                    const service = this.querySelector('.card-content h3').textContent;
+                    console.log(`Card selecionado: ${provider} - ${service}`);
+                    
+                    this.classList.add('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    setTimeout(() => {
+                        this.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    }, 500);
+                }
+            });
+        });
+
+        // Botões de ação
+        document.querySelectorAll('.card-footer button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const card = this.closest('.service-card');
+                const provider = card.querySelector('.card-image h4').textContent;
+                const service = card.querySelector('.card-content h3').textContent;
+                const price = card.querySelector('.text-2xl').textContent;
+                
+                alert(`Solicitação enviada para:\n\n${service}\nFornecedor: ${provider}\nValor: ${price}\n\nEm breve entraremos em contato.`);
+            });
+        });
+    </script>
+</body>
+</html>

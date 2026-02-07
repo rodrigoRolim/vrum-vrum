@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes MultiServiços</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Navegação ativa */
+        .nav-link.active {
+            position: relative;
+        }
+        
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+        }
+        
+        /* Estilos para tipos de prestadores */
+        .driver-individual::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            z-index: 10;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .fleet-company::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #059669, #0d9488);
+            z-index: 10;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .tour-agency::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #d97706, #f59e0b);
+            z-index: 10;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        /* Badges */
+        .badge-individual {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+        }
+        
+        .badge-fleet {
+            background: linear-gradient(135deg, #059669, #0d9488);
+            color: white;
+        }
+        
+        .badge-agency {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: white;
+        }
+        
+        /* Cores de categoria */
+        .category-school { border-left: 4px solid #8b5cf6; }
+        .category-corporate { border-left: 4px solid #1e40af; }
+        .category-delivery { border-left: 4px solid #dc2626; }
+        .category-tourism { border-left: 4px solid #d97706; }
+        .category-regular { border-left: 4px solid #0ea5e9; }
+        .category-excursion { border-left: 4px solid #7c3aed; }
+        
+        /* Botões de categoria */
+        .btn-school { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
+        .btn-corporate { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .btn-delivery { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .btn-tourism { background: linear-gradient(135deg, #d97706, #f59e0b); }
+        .btn-regular { background: linear-gradient(135deg, #0ea5e9, #3b82f6); }
+        .btn-excursion { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+        
+        /* Cards */
+        .service-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-image {
+            height: 160px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Filtros */
+        .filter-pill {
+            transition: all 0.2s ease;
+            border-width: 2px;
+        }
+        
+        .filter-pill.active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* Páginas */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Banner de categoria */
+        .category-banner {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .category-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Container principal com navegação -->
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- Cabeçalho fixo -->
+        <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 md:px-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 py-4">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                            <i class="fas fa-bus mr-2"></i>Transportes MultiServiços
+                        </h1>
+                        <p class="text-gray-600 text-sm">Sua plataforma completa de transporte</p>
+                    </div>
+                    
+                    <!-- Menu de categorias -->
+                    <nav class="flex flex-wrap gap-1 md:gap-2">
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="home">
+                            <i class="fas fa-home mr-2"></i>Início
+                        </button>
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="school">
+                            <i class="fas fa-school mr-2"></i>Escolar
+                        </button>
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="corporate">
+                            <i class="fas fa-briefcase mr-2"></i>Empresarial
+                        </button>
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="delivery">
+                            <i class="fas fa-truck mr-2"></i>Encomendas
+                        </button>
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="tourism">
+                            <i class="fas fa-camera mr-2"></i>Turismo
+                        </button>
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="regular">
+                            <i class="fas fa-calendar-day mr-2"></i>Regular
+                        </button>
+                        <button class="nav-link px-3 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors" data-page="excursions">
+                            <i class="fas fa-route mr-2"></i>Excursões
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Conteúdo das páginas -->
+        <main class="p-4 md:p-6">
+            
+            <!-- PÁGINA INICIAL -->
+            <div class="page active" id="page-home">
+                <!-- Banner principal -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10 max-w-2xl">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Encontre o transporte ideal</h2>
+                        <p class="text-lg mb-6">Mais de 500 prestadores de serviço para todas as suas necessidades de transporte</p>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors" data-page="school">
+                                <i class="fas fa-school mr-2"></i>Transporte Escolar
+                            </button>
+                            <button class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors" data-page="corporate">
+                                <i class="fas fa-briefcase mr-2"></i>Transporte Empresarial
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Categorias em destaque -->
+                <div class="mb-10">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Escolha por categoria</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Card Categoria Escolar -->
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer" data-page="school">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                        <i class="fas fa-school text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold text-purple-600">+120 prestadores</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Transporte Escolar</h4>
+                                <p class="text-gray-600 mb-4">Transporte seguro para crianças com motoristas credenciados e veículos equipados</p>
+                                <button class="w-full px-4 py-2 btn-school text-white font-medium rounded-lg">
+                                    Ver prestadores
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Categoria Empresarial -->
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer" data-page="corporate">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center text-white">
+                                        <i class="fas fa-briefcase text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold text-blue-600">+85 prestadores</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Transporte Empresarial</h4>
+                                <p class="text-gray-600 mb-4">Solução completa para empresas com frota própria e serviços corporativos</p>
+                                <button class="w-full px-4 py-2 btn-corporate text-white font-medium rounded-lg">
+                                    Ver prestadores
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Categoria Encomendas -->
+                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer" data-page="delivery">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-600 to-red-800 flex items-center justify-center text-white">
+                                        <i class="fas fa-truck text-xl"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold text-red-600">+200 prestadores</span>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-900 mb-2">Encomendas & Entregas</h4>
+                                <p class="text-gray-600 mb-4">Entrega rápida de documentos, mercadorias e encomendas na região metropolitana</p>
+                                <button class="w-full px-4 py-2 btn-delivery text-white font-medium rounded-lg">
+                                    Ver prestadores
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Como funciona -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-8 mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Como funciona</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-search text-2xl text-blue-600"></i>
+                            </div>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">Encontre</h4>
+                            <p class="text-gray-600">Busque por categoria, localização ou tipo de prestador</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-compare text-2xl text-green-600"></i>
+                            </div>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">Compare</h4>
+                            <p class="text-gray-600">Veja preços, avaliações e detalhes dos serviços</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-handshake text-2xl text-purple-600"></i>
+                            </div>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">Contrate</h4>
+                            <p class="text-gray-600">Entre em contato direto ou solicite um orçamento</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA TRANSPORTE ESCOLAR -->
+            <div class="page" id="page-school">
+                <!-- Banner da categoria -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Transporte Escolar</h2>
+                        <p class="text-lg max-w-2xl">Encontre motoristas e empresas especializadas em transporte seguro para crianças. Todos credenciados e com veículos equipados.</p>
+                    </div>
+                </div>
+                
+                <!-- Filtros para escolar -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6">
+                    <div class="flex flex-wrap gap-3">
+                        <button class="filter-pill active px-4 py-2 rounded-lg font-medium bg-purple-500 text-white" data-filter="all">
+                            Todos
+                        </button>
+                        <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300" data-filter="individual">
+                            <i class="fas fa-user mr-2"></i> Motoristas
+                        </button>
+                        <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300" data-filter="fleet">
+                            <i class="fas fa-bus mr-2"></i> Empresas
+                        </button>
+                        <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300" data-filter="period">
+                            <i class="fas fa-clock mr-2"></i> Período Integral
+                        </button>
+                        <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300" data-filter="half">
+                            <i class="fas fa-sun mr-2"></i> Meio Período
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Grid de cards ESCOLAR -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="school-cards">
+                    <!-- Card 1: Motorista Individual Escolar -->
+                    <div class="service-card driver-individual category-school bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group">
+                        <div class="card-image bg-gradient-to-br from-purple-700 to-purple-900">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                            <div class="absolute top-3 right-3">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                                    <i class="fas fa-shuttle-van"></i> Van 15 lugares
+                                </span>
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3">
+                                <h4 class="text-white font-semibold text-sm truncate">Zona Sul - São Paulo</h4>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content p-4">
+                            <div class="mb-3">
+                                <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors mb-1">
+                                    Transporte Escolar Período Integral
+                                </h3>
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500">5.0 • 42 avaliações</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalhes específicos ESCOLAR -->
+                            <div class="mb-4">
+                                <div class="p-3 bg-purple-50 rounded-lg mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-gray-900">Carlos Mendes</p>
+                                            <p class="text-xs text-gray-600">Motorista • CRV escolar • 15 anos experiência</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-2 gap-3 text-sm">
+                                        <div class="flex items-center gap-2 text-gray-700">
+                                            <i class="fas fa-users text-purple-500"></i>
+                                            <span>15 crianças</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-gray-700">
+                                            <i class="fas fa-child text-purple-500"></i>
+                                            <span>3-12 anos</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-sm text-gray-700">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <i class="fas fa-clock text-purple-500"></i>
+                                            <span>Segunda a sexta</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-map-marker-alt text-purple-500"></i>
+                                            <span>Zona Sul - SP</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Segurança -->
+                                    <div class="flex flex-wrap gap-1">
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-purple-100 text-purple-700">
+                                            <i class="fas fa-shield-alt"></i> Cintos 3 pontos
+                                        </span>
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-purple-100 text-purple-700">
+                                            <i class="fas fa-user-check"></i> Monitora
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preço -->
+                            <div class="card-footer pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Contrato mensal</p>
+                                        <p class="text-2xl font-bold text-gray-900">R$ 300,00</p>
+                                        <p class="text-xs text-gray-500">por criança</p>
+                                    </div>
+                                    <button class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                        Contatar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2: Empresa Escolar -->
+                    <div class="service-card fleet-company category-school bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group">
+                        <div class="card-image bg-gradient-to-br from-purple-800 to-purple-950">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                            <div class="absolute top-3 right-3">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                                    <i class="fas fa-bus"></i> Ônibus 30 lugares
+                                </span>
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3">
+                                <h4 class="text-white font-semibold text-sm truncate">São Paulo Capital</h4>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content p-4">
+                            <div class="mb-3">
+                                <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors mb-1">
+                                    Transporte Escolar para Grandes Grupos
+                                </h3>
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500">4.7 • 89 avaliações</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalhes empresa escolar -->
+                            <div class="mb-4">
+                                <div class="p-3 bg-green-50 rounded-lg mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-600 to-teal-600 flex items-center justify-center text-white">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-gray-900">Escola Transportes LTDA</p>
+                                            <p class="text-xs text-gray-600">Empresa • 8 veículos • 15 anos no mercado</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-2 gap-3 text-sm">
+                                        <div class="flex items-center gap-2 text-gray-700">
+                                            <i class="fas fa-users text-green-600"></i>
+                                            <span>Até 30 crianças</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-gray-700">
+                                            <i class="fas fa-school text-green-600"></i>
+                                            <span>+20 escolas</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Segurança empresa -->
+                                    <div class="flex flex-wrap gap-1">
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-green-100 text-green-700">
+                                            <i class="fas fa-shield-alt"></i> Seguro completo
+                                        </span>
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-green-100 text-green-700">
+                                            <i class="fas fa-camera"></i> Câmeras
+                                        </span>
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-green-100 text-green-700">
+                                            <i class="fas fa-first-aid"></i> Primeiros socorros
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preço -->
+                            <div class="card-footer pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Contrato mensal</p>
+                                        <p class="text-2xl font-bold text-gray-900">R$ 280,00</p>
+                                        <p class="text-xs text-gray-500">por criança</p>
+                                    </div>
+                                    <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                        Solicitar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: Motorista Meio Período -->
+                    <div class="service-card driver-individual category-school bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group">
+                        <div class="card-image bg-gradient-to-br from-pink-700 to-purple-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                            <div class="absolute top-3 right-3">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                                    <i class="fas fa-car"></i> Carro 4 lugares
+                                </span>
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3">
+                                <h4 class="text-white font-semibold text-sm truncate">Zona Oeste - SP</h4>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content p-4">
+                            <div class="mb-3">
+                                <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors mb-1">
+                                    Transporte Individual Escolar
+                                </h3>
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500">5.0 • 31 avaliações</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalhes -->
+                            <div class="mb-4">
+                                <div class="p-3 bg-pink-50 rounded-lg mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-gray-900">Ana Santos</p>
+                                            <p class="text-xs text-gray-600">Motorista • Mãe credenciada • 8 anos experiência</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="text-sm text-gray-700">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <i class="fas fa-clock text-pink-500"></i>
+                                            <span>Meio período (manhã ou tarde)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-users text-pink-500"></i>
+                                            <span>Até 3 crianças</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Especialidades -->
+                                    <div class="flex flex-wrap gap-1">
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-pink-100 text-pink-700">
+                                            <i class="fas fa-baby"></i> Crianças pequenas
+                                        </span>
+                                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-pink-100 text-pink-700">
+                                            <i class="fas fa-heart"></i> Atenção especial
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preço -->
+                            <div class="card-footer pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs text-gray-500">Contrato mensal</p>
+                                        <p class="text-2xl font-bold text-gray-900">R$ 350,00</p>
+                                        <p class="text-xs text-gray-500">por criança</p>
+                                    </div>
+                                    <button class="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                        Contatar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Informações úteis -->
+                <div class="mt-12 bg-white rounded-2xl border border-gray-200 p-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Informações sobre transporte escolar</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-3">Requisitos dos prestadores</h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>CRV (Certificado de Registro de Veículo) escolar atualizado</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>CNH categoria D ou superior</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Curso de transporte escolar obrigatório</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Seguro obrigatório contra acidentes</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900 mb-3">Dicas para os pais</h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                    <span>Sempre verifique as credenciais do motorista</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                    <span>Confira se o veículo possui cintos de segurança para todos</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                    <span>Conheça o trajeto que seu filho fará diariamente</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                    <span>Peça referências de outros pais que utilizam o serviço</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA TRANSPORTE EMPRESARIAL -->
+            <div class="page" id="page-corporate">
+                <!-- Banner da categoria -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Transporte Empresarial</h2>
+                        <p class="text-lg max-w-2xl">Soluções completas de transporte para empresas. Fretamento, rotas personalizadas, viagens corporativas e muito mais.</p>
+                    </div>
+                </div>
+                
+                <!-- Cards de transporte empresarial seriam aqui -->
+                <div class="text-center py-12">
+                    <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-briefcase text-4xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Página em construção</h3>
+                    <p class="text-gray-600 max-w-md mx-auto">Estamos preparando os melhores prestadores de transporte empresarial para você.</p>
+                    <button class="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors" data-page="home">
+                        Voltar para o início
+                    </button>
+                </div>
+            </div>
+            
+            <!-- PÁGINA ENCOMENDAS -->
+            <div class="page" id="page-delivery">
+                <!-- Banner da categoria -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Encomendas & Entregas</h2>
+                        <p class="text-lg max-w-2xl">Entrega rápida e segura de documentos, mercadorias e encomendas. Motoristas particulares e empresas de logística.</p>
+                    </div>
+                </div>
+                
+                <!-- Conteúdo específico para encomendas seria aqui -->
+                <div class="text-center py-12">
+                    <div class="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-truck text-4xl text-red-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Página em construção</h3>
+                    <p class="text-gray-600 max-w-md mx-auto">Em breve você encontrará todos os prestadores de serviços de entrega aqui.</p>
+                </div>
+            </div>
+            
+            <!-- PÁGINA TURISMO -->
+            <div class="page" id="page-tourism">
+                <!-- Banner da categoria -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Turismo & Passeios</h2>
+                        <p class="text-lg max-w-2xl">Guias turísticos, city tours, passeios personalizados e agências de turismo para explorar a cidade.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA VIAGENS REGULARES -->
+            <div class="page" id="page-regular">
+                <!-- Banner da categoria -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Viagens Regulares</h2>
+                        <p class="text-lg max-w-2xl">Linhas regulares, viagens diárias, transporte intermunicipal e interestadual com horários fixos.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA EXCURSÕES -->
+            <div class="page" id="page-excursions">
+                <!-- Banner da categoria -->
+                <div class="category-banner rounded-2xl mb-8 p-8 text-white" style="background-image: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    <div class="relative z-10">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Excursões & Pacotes Turísticos</h2>
+                        <p class="text-lg max-w-2xl">Pacotes completos com transporte, hospedagem e passeios. Agências de turismo e organizadores de excursões.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script>
+        // Sistema de navegação por páginas
+        document.querySelectorAll('.nav-link, [data-page]').forEach(link => {
+            link.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
+                
+                // Atualizar navegação ativa
+                document.querySelectorAll('.nav-link').forEach(nav => {
+                    nav.classList.remove('active', 'text-blue-600');
+                    nav.classList.add('text-gray-700');
+                });
+                
+                if (this.classList.contains('nav-link')) {
+                    this.classList.add('active', 'text-blue-600');
+                    this.classList.remove('text-gray-700');
+                }
+                
+                // Esconder todas as páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Mostrar página selecionada
+                document.getElementById(`page-${pageId}`).classList.add('active');
+                
+                // Rolagem suave para o topo
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        
+        // Sistema de filtros para página escolar
+        document.querySelectorAll('#page-school .filter-pill').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover classe active de todos os botões
+                document.querySelectorAll('#page-school .filter-pill').forEach(btn => {
+                    btn.classList.remove('active', 'bg-purple-500', 'text-white');
+                    btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+                });
+                
+                // Adicionar classe active ao botão clicado
+                this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+                this.classList.add('active', 'bg-purple-500', 'text-white');
+                
+                const filter = this.getAttribute('data-filter');
+                filterSchoolCards(filter);
+            });
+        });
+        
+        function filterSchoolCards(filter) {
+            const cards = document.querySelectorAll('#school-cards .service-card');
+            
+            cards.forEach(card => {
+                // Simulação de filtragem - na implementação real, você usaria data-attributes
+                if (filter === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    // Aqui você implementaria a lógica real de filtragem
+                    card.style.display = 'block';
+                }
+            });
+        }
+        
+        // Sistema de interação com cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.closest('button')) {
+                    const title = this.querySelector('h3').textContent;
+                    console.log(`Card selecionado: ${title}`);
+                    
+                    // Efeito visual de seleção
+                    this.classList.add('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    setTimeout(() => {
+                        this.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    }, 800);
+                }
+            });
+        });
+
+        // Sistema de botões de ação
+        document.querySelectorAll('.card-footer button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const card = this.closest('.service-card');
+                const title = card.querySelector('h3').textContent;
+                const price = card.querySelector('.text-2xl')?.textContent || 'Valor sob consulta';
+                
+                // Determinar categoria
+                let category = 'Transporte';
+                if (card.classList.contains('category-school')) category = 'Transporte Escolar';
+                else if (card.classList.contains('category-corporate')) category = 'Transporte Empresarial';
+                else if (card.classList.contains('category-delivery')) category = 'Encomendas';
+                
+                alert(`Solicitação enviada para:\n\n${title}\nCategoria: ${category}\nValor: ${price}\n\nEm breve entraremos em contato.`);
+            });
+        });
+        
+        // Inicializar página ativa
+        document.querySelector('.nav-link[data-page="home"]').classList.add('active', 'text-blue-600');
+    </script>
+</body>
+</html>

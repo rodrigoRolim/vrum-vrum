@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes MultiServiços</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Estrutura consistente dos cards */
+        .service-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-image {
+            height: 160px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-footer {
+            margin-top: auto;
+        }
+        
+        /* Animações */
+        .group:hover .image-hover {
+            transform: scale(1.05);
+        }
+        
+        .image-hover {
+            transition: transform 0.5s ease;
+        }
+        
+        /* Linha de rota vertical */
+        .route-line {
+            width: 2px;
+            height: 16px;
+            margin-left: 5px;
+            background: linear-gradient(to bottom, #cbd5e1, var(--route-color, #3b82f6));
+        }
+        
+        /* Grades responsivas */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Filtros elegantes */
+        .filter-pill {
+            transition: all 0.2s ease;
+            border-width: 2px;
+        }
+        
+        .filter-pill.active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <!-- Sistema de Filtros (mantido do código anterior) -->
+        <header class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                        Transportes MultiServiços
+                    </h1>
+                    <p class="text-gray-600 mt-2">Serviços de transporte com rotas e responsáveis claros</p>
+                </div>
+            </div>
+            
+            <!-- Filtros simplificados para exemplo -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6">
+                <div class="flex flex-wrap gap-3">
+                    <button class="filter-pill active px-4 py-2 rounded-lg font-medium bg-blue-500 text-white">
+                        Todos
+                    </button>
+                    <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300">
+                        Excursões
+                    </button>
+                    <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300">
+                        Viagens Regulares
+                    </button>
+                    <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300">
+                        Fretamento
+                    </button>
+                    <button class="filter-pill px-4 py-2 rounded-lg font-medium bg-white text-gray-700 border border-gray-300">
+                        Encomendas
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Grid de Cards COM INFORMAÇÕES COMPLETAS -->
+        <div class="cards-grid" id="cards-container">
+            
+            <!-- CARD 1: EXCURSÃO (com rota clara) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="excursions" 
+                data-vehicle="bus">
+                
+                <div class="card-image bg-gradient-to-br from-purple-700 to-purple-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900">
+                            <i class="fas fa-clock text-xs"></i> 2 dias / 1 noite
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-bus"></i> Ônibus Leito
+                        </span>
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">São Paulo → Aparecida do Norte</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-4">
+                    <div class="mb-3">
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-purple-600 transition-colors mb-1">
+                            Excursão Religiosa - Aparecida do Norte
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.8 • 156 avaliações</span>
+                        </div>
+                    </div>
+                    
+                    <!-- ROTA DA EXCURSÃO (AGORA CLARA) -->
+                    <div class="mb-4">
+                        <div class="space-y-2 mb-3">
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                                    <span>São Paulo - SP</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">Saída: 05:00</span>
+                            </div>
+                            
+                            <div class="ml-1 w-0.5 h-4 bg-gradient-to-b from-gray-300 to-purple-500"></div>
+                            
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
+                                    <span class="font-medium">Aparecida - SP</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">Chegada: 09:00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalhes do Pacote -->
+                        <div class="pt-3 border-t border-gray-100">
+                            <p class="text-xs text-gray-500 mb-2">Pacote inclui:</p>
+                            <div class="flex flex-wrap gap-1">
+                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-50 text-blue-700">
+                                    <i class="fas fa-hotel"></i> Hospedagem 1 noite
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-green-50 text-green-700">
+                                    <i class="fas fa-utensils"></i> 3 refeições
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-purple-50 text-purple-700">
+                                    <i class="fas fa-map-signs"></i> Guia turístico
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-amber-50 text-amber-700">
+                                    <i class="fas fa-ticket-alt"></i> Ingressos incluídos
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RESPONSÁVEL -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                <i class="fas fa-building text-gray-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">TransTur Brasil</p>
+                                <p class="text-xs text-gray-600">São Paulo - SP • 15 anos no mercado</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PREÇO E BOTÃO -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Pacote completo</p>
+                                <p class="text-2xl font-bold text-gray-900">R$ 450,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Reservar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 2: VIAGEM REGULAR (com origem/destino) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="regular" 
+                data-vehicle="microbus">
+                
+                <div class="card-image bg-gradient-to-br from-blue-700 to-blue-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900">
+                            <i class="fas fa-calendar-day text-xs"></i> Diário
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-bus"></i> Micro-ônibus
+                        </span>
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">São Paulo → Campinas</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-4">
+                    <div class="mb-3">
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-blue-600 transition-colors mb-1">
+                            Linha Regular SP ↔ Campinas
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.9 • 89 avaliações</span>
+                        </div>
+                    </div>
+                    
+                    <!-- ROTA DA VIAGEM REGULAR -->
+                    <div class="mb-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                                    <span>São Paulo - Terminal Tietê</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">08:00</span>
+                            </div>
+                            
+                            <div class="ml-1 w-0.5 h-4 bg-gradient-to-b from-gray-300 to-blue-500"></div>
+                            
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                    <span class="font-medium">Campinas - Terminal Rodoviário</span>
+                                </div>
+                                <span class="text-gray-500 text-xs">09:30</span>
+                            </div>
+                            
+                            <!-- Frequência e vagas -->
+                            <div class="pt-2 flex items-center gap-4 text-sm text-gray-700">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-clock text-gray-400"></i>
+                                    <span>5x ao dia</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                    <span><span class="font-bold text-green-600">12</span> vagas</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Aceita encomendas -->
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <div class="flex items-center gap-2 text-blue-600 text-sm">
+                                <i class="fas fa-box text-blue-500"></i>
+                                <span>Aceita encomendas e bagagem extra</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RESPONSÁVEL (com cidade de origem) -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                <i class="fas fa-user text-gray-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">João Silva Transportes</p>
+                                <p class="text-xs text-gray-600">São Paulo - SP • Motorista credenciado • 15 anos</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PREÇO E BOTÃO -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Por pessoa</p>
+                                <p class="text-2xl font-bold text-gray-900">R$ 45,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Comprar Passagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 3: FRETAMENTO ESCOLAR (com cidade de origem) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="charter" 
+                data-vehicle="van"
+                data-charter="school">
+                
+                <div class="card-image bg-gradient-to-br from-green-700 to-green-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900">
+                            <i class="fas fa-child text-xs"></i> Escolar
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-shuttle-van"></i> Van 15 lugares
+                        </span>
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">Zona Sul - São Paulo</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-4">
+                    <div class="mb-3">
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-green-600 transition-colors mb-1">
+                            Transporte Escolar Período Integral
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">5.0 • 42 avaliações</span>
+                        </div>
+                    </div>
+                    
+                    <!-- LOCALIZAÇÃO E PERÍODO -->
+                    <div class="mb-4">
+                        <div class="space-y-3">
+                            <!-- Cidade de origem -->
+                            <div class="flex items-center gap-2 text-sm text-gray-700">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                <span class="font-medium">São Paulo - Zona Sul</span>
+                                <span class="text-gray-500 text-xs">• Bairros atendidos</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-calendar-alt text-gray-400"></i>
+                                    <span>Segunda a sexta</span>
+                                </div>
+                                <div class="text-gray-700">
+                                    <span class="font-medium">15</span> crianças
+                                </div>
+                            </div>
+                            
+                            <!-- Horários -->
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-sun text-amber-400"></i>
+                                    <div>
+                                        <p class="font-medium">7:00 - 12:00</p>
+                                        <p class="text-xs text-gray-500">Manhã</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-cloud-sun text-orange-400"></i>
+                                    <div>
+                                        <p class="font-medium">13:00 - 18:00</p>
+                                        <p class="text-xs text-gray-500">Tarde</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Segurança -->
+                            <div class="pt-2">
+                                <p class="text-xs text-gray-500 mb-1">Itens de segurança:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-red-50 text-red-700">
+                                        <i class="fas fa-shield-alt"></i> Cintos 3 pontos
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-50 text-blue-700">
+                                        <i class="fas fa-user-check"></i> Monitora
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RESPONSÁVEL (com cidade) -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                <i class="fas fa-user-tie text-gray-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Carlos Educação Transportes</p>
+                                <p class="text-xs text-gray-600">São Paulo - SP • Credenciado • 12 anos de experiência</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PREÇO E BOTÃO -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Contrato mensal</p>
+                                <p class="text-2xl font-bold text-gray-900">R$ 300,00</p>
+                                <p class="text-xs text-gray-500">por criança</p>
+                            </div>
+                            <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Contatar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 4: ENCOMENDAS (com origem e área de cobertura) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="delivery" 
+                data-vehicle="car">
+                
+                <div class="card-image bg-gradient-to-br from-red-700 to-red-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900">
+                            <i class="fas fa-bolt text-xs"></i> Express
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-truck"></i> Furgão
+                        </span>
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">São Paulo → Região Metropolitana</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-4">
+                    <div class="mb-3">
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-red-600 transition-colors mb-1">
+                            Entrega Rápida - Documentos e Encomendas
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.3 • 67 avaliações</span>
+                        </div>
+                    </div>
+                    
+                    <!-- ROTA E COBERTURA DAS ENCOMENDAS -->
+                    <div class="mb-4">
+                        <div class="space-y-3">
+                            <!-- Área de cobertura -->
+                            <div class="flex items-start gap-2 text-sm text-gray-700">
+                                <i class="fas fa-map-marked-alt text-gray-400 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium">Área de Cobertura:</p>
+                                    <p class="text-xs text-gray-600">São Paulo (capital) e região metropolitana</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Cidades atendidas -->
+                            <div class="pt-2">
+                                <p class="text-xs text-gray-500 mb-1">Principais destinos:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                                        São Paulo (Capital)
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                                        Guarulhos
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                                        Osasco
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                                        São Bernardo
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalhes do serviço -->
+                            <div class="grid grid-cols-2 gap-3 text-sm pt-3">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-weight text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">Até 800kg</p>
+                                        <p class="text-xs text-gray-500">Capacidade</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-clock text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">2-4 horas</p>
+                                        <p class="text-xs text-gray-500">Prazo médio</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tipo de entrega -->
+                            <div class="pt-3 border-t border-gray-100">
+                                <div class="flex items-center gap-2 text-sm text-gray-700">
+                                    <i class="fas fa-warehouse text-gray-400"></i>
+                                    <span>Coleta e entrega • Rastreamento online</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RESPONSÁVEL (com cidade base) -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                <i class="fas fa-building text-gray-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Rápido Entrega Express</p>
+                                <p class="text-xs text-gray-600">São Paulo - SP • CNPJ: 12.345.678/0001-90</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PREÇO E BOTÃO -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">A partir de</p>
+                                <p class="text-2xl font-bold text-gray-900">R$ 25,00</p>
+                                <p class="text-xs text-gray-500">por km + peso</p>
+                            </div>
+                            <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Solicitar Entrega
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 5: TURISMO (com cidade de origem e roteiro) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="tourism" 
+                data-vehicle="car">
+                
+                <div class="card-image bg-gradient-to-br from-amber-700 to-amber-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900">
+                            <i class="fas fa-camera text-xs"></i> City Tour
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-car"></i> Carro Executivo
+                        </span>
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">São Paulo - Centro Histórico</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-4">
+                    <div class="mb-3">
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-amber-600 transition-colors mb-1">
+                            Tour Histórico - Centro de São Paulo
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.7 • 203 avaliações</span>
+                        </div>
+                    </div>
+                    
+                    <!-- LOCALIZAÇÃO E ROTEIRO -->
+                    <div class="mb-4">
+                        <div class="space-y-3">
+                            <!-- Cidade de origem -->
+                            <div class="flex items-center gap-2 text-sm text-gray-700">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                <span class="font-medium">Partida: São Paulo - Centro</span>
+                                <span class="text-gray-500 text-xs">• Hotel ou ponto combinado</span>
+                            </div>
+                            
+                            <!-- Roteiro -->
+                            <div class="pt-2">
+                                <p class="text-xs text-gray-500 mb-1">Roteiro inclui:</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-50 text-blue-700">
+                                        <i class="fas fa-landmark"></i> Centro Histórico
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-green-50 text-green-700">
+                                        <i class="fas fa-theater-masks"></i> Teatro Municipal
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-purple-50 text-purple-700">
+                                        <i class="fas fa-cathedral"></i> Catedral da Sé
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-amber-50 text-amber-700">
+                                        <i class="fas fa-store"></i> Mercado Municipal
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalhes -->
+                            <div class="grid grid-cols-2 gap-3 text-sm pt-3">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">Até 4 pessoas</p>
+                                        <p class="text-xs text-gray-500">Grupo privativo</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-clock text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">5 horas</p>
+                                        <p class="text-xs text-gray-500">Duração</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Incluso -->
+                            <div class="pt-3 border-t border-gray-100">
+                                <div class="flex items-center gap-2 text-sm text-gray-700">
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                    <span>Guia credenciado • Água mineral • Pick-up no hotel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RESPONSÁVEL (com cidade) -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                <i class="fas fa-building text-gray-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">City Tours SP</p>
+                                <p class="text-xs text-gray-600">São Paulo - SP • Guias credenciados pelo MTur</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PREÇO E BOTÃO -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Por passeio</p>
+                                <p class="text-2xl font-bold text-gray-900">R$ 280,00</p>
+                            </div>
+                            <button class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Agendar Tour
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 6: FRETAMENTO CORPORATIVO (com cidade de origem) -->
+            <div class="service-card bg-white rounded-xl border border-gray-300 shadow-lg overflow-hidden hover:shadow-xl cursor-pointer group" 
+                data-service="charter" 
+                data-vehicle="bus"
+                data-charter="corporate">
+                
+                <div class="card-image bg-gradient-to-br from-indigo-700 to-indigo-900">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    
+                    <div class="absolute top-3 left-3 right-3 flex justify-between items-start">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-gray-900">
+                            <i class="fas fa-briefcase text-xs"></i> Corporativo
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-black/80 text-white">
+                            <i class="fas fa-bus"></i> Ônibus Executivo
+                        </span>
+                    </div>
+                    
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <h4 class="text-white font-semibold text-sm truncate">São Paulo - Transporte Empresarial</h4>
+                    </div>
+                </div>
+                
+                <div class="card-content p-4">
+                    <div class="mb-3">
+                        <h3 class="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-indigo-600 transition-colors mb-1">
+                            Transporte de Funcionários - Rotas Personalizadas
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400 text-xs"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">4.6 • 78 avaliações</span>
+                        </div>
+                    </div>
+                    
+                    <!-- LOCALIZAÇÃO E SERVIÇO -->
+                    <div class="mb-4">
+                        <div class="space-y-3">
+                            <!-- Cidade de origem -->
+                            <div class="flex items-center gap-2 text-sm text-gray-700">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                <span class="font-medium">Base: São Paulo - Região Metropolitana</span>
+                            </div>
+                            
+                            <!-- Descrição do serviço -->
+                            <div class="pt-2">
+                                <p class="text-sm text-gray-600">
+                                    Serviço corporativo para transporte de funcionários. Rotas personalizadas conforme necessidade da empresa.
+                                </p>
+                            </div>
+                            
+                            <!-- Benefícios -->
+                            <div class="grid grid-cols-2 gap-3 text-sm pt-3">
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">Até 40 pessoas</p>
+                                        <p class="text-xs text-gray-500">Capacidade</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <i class="fas fa-wifi text-gray-400"></i>
+                                    <div>
+                                        <p class="font-medium">Wi-Fi grátis</p>
+                                        <p class="text-xs text-gray-500">Conectividade</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Horários flexíveis -->
+                            <div class="pt-3 border-t border-gray-100">
+                                <div class="flex items-center gap-2 text-sm text-gray-700">
+                                    <i class="fas fa-clock text-gray-400"></i>
+                                    <span>Horários flexíveis • Rotas personalizadas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RESPONSÁVEL (com cidade) -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                <i class="fas fa-building text-gray-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Corporate Transport Solutions</p>
+                                <p class="text-xs text-gray-600">São Paulo - SP • Especialista em transporte empresarial</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PREÇO E BOTÃO -->
+                    <div class="card-footer pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-500">Contrato mensal</p>
+                                <p class="text-2xl font-bold text-gray-900">R$ 1.500,00</p>
+                                <p class="text-xs text-gray-500">valor base</p>
+                            </div>
+                            <button class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors shadow-sm hover:shadow">
+                                Solicitar Proposta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // Sistema básico de interação
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.closest('button')) {
+                    const title = this.querySelector('h3').textContent;
+                    console.log(`Card selecionado: ${title}`);
+                    
+                    this.classList.add('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    setTimeout(() => {
+                        this.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    }, 800);
+                }
+            });
+        });
+
+        document.querySelectorAll('.card-footer button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const card = this.closest('.service-card');
+                const title = card.querySelector('h3').textContent;
+                const price = card.querySelector('.text-2xl').textContent;
+                
+                alert(`Solicitação enviada para:\n\n${title}\nValor: ${price}\n\nEm breve entraremos em contato.`);
+            });
+        });
+    </script>
+</body>
+</html>
