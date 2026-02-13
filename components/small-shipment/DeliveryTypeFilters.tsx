@@ -6,7 +6,7 @@ interface Props {
   value: DeliveryType;
   onChange: (value: DeliveryType) => void
 }
-enum filters {
+enum Filters {
   ALL='all',
   DOCUMENT='document',
   ECOMMERCE='ecommerce',
@@ -24,42 +24,42 @@ export default function DeliveryTypeFilters({ value, onChange }: Props) {
     <div className="flex md:flex-wrap py-2 px-1 overflow-x-auto flex-nowrap gap-3 w-full">
       <SelectableButton
         label="Documentos"
-        active={value === filters.DOCUMENT}
+        active={value === Filters.DOCUMENT}
         icon={FileBox}
         value="document"
         onClick={selectFilter}
       />
       <SelectableButton
         label="E-commerce"
-        active={value === filters.ECOMMERCE}
+        active={value === Filters.ECOMMERCE}
         icon={ShoppingBag}
         value="ecommerce"
         onClick={selectFilter}
       />
       <SelectableButton
         label="Medicamentos"
-        active={value === filters.MEDICINAL}
+        active={value === Filters.MEDICINAL}
         icon={PillBottle}
         value="medicinal"
         onClick={selectFilter}
       />
       <SelectableButton
         label="Alimentos"
-        active={value === filters.FOOD}
+        active={value === Filters.FOOD}
         icon={Utensils}
         value="food"
         onClick={selectFilter}
       />
       <SelectableButton
         label="Urgente"
-        active={value === filters.FAST}
+        active={value === Filters.FAST}
         icon={Zap}
         value="fast"
         onClick={selectFilter}
       />
       <SelectableButton
         label="todos"
-        active={value === filters.ALL}
+        active={value === Filters.ALL}
         value="all"
         onClick={selectFilter}
       />
