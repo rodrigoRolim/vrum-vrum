@@ -24,6 +24,11 @@ function getCity(address: any): string | null {
     address?.city ||
     address?.town ||
     address?.village ||
+    address?.hamlet ||
+    address?.municipality ||
+    address?.county ||
+    address?.state_district ||
+    address?.urban ||
     null
   );
 }
@@ -77,11 +82,12 @@ export async function GET(req: Request): Promise<NextResponse<MapAddress[]>> {
   const queryNorm = normalize(q);
 
   const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
-    q,
+    city: queryNorm,
     format: "json",
-    addressdetails: "1",
+    addressdetails: "2",
     limit: "10",
     countrycodes: "br",
+    polygon_geojson: "1"
   })}`;
 
   const res = await fetch(url, {
@@ -93,6 +99,7 @@ export async function GET(req: Request): Promise<NextResponse<MapAddress[]>> {
 
   const data = await res.json();
 
+  console.log("OSM results:", data);
   const results = data
     .map((item: any) => {
       const cityRaw = getCity(item.address);
@@ -100,11 +107,7 @@ export async function GET(req: Request): Promise<NextResponse<MapAddress[]>> {
 
       if (!cityRaw || !stateRaw) return null;
 
-      const city = normalize(cityRaw);
       const state = normalize(stateRaw);
-      const s = score(city, queryNorm);
-
-      if (s === 0) return null;
 
       return {
         id: item.place_id,
@@ -114,12 +117,9 @@ export async function GET(req: Request): Promise<NextResponse<MapAddress[]>> {
         city: cityRaw,
         state: stateRaw,
         stateSlug: STATE_MAP[state] ?? "",
-        score: s,
       };
     })
     .filter(Boolean)
-    .sort((a: any, b: any) => b.score - a.score)
-    .slice(0, 6)
     .map((item: any): MapAddress => ({
       id: String(item.id),
       label: item.label,
