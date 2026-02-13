@@ -1,18 +1,18 @@
-import { Car, Motorbike, Truck, Van } from "lucide-react";
+import { Bus, BusFront, Car, Motorbike, Truck, Van } from "lucide-react";
 import SelectableButton from "../SelectableButton";
 
 
-export type VehicleType = 'all' | 'motoboy' | 'car' | 'van' | 'truck'
+export type VehicleType = 'all' | 'car' | 'van' | 'bus' | 'minibus'
 interface Props {
   value: VehicleType;
   onChange: (value: VehicleType) => void
 }
 enum filters {
   ALL='all',
-  MOTOBOY='motoboy',
   CAR='car',
   VAN='van',
-  TRUCK='truck'
+  BUS='bus',
+  MINIBUS='minibus'
 }
 
 export default function VehicleTypeFilter({ value, onChange }: Props) {
@@ -21,18 +21,24 @@ export default function VehicleTypeFilter({ value, onChange }: Props) {
   }
   return (
     <div className="flex md:flex-wrap py-2 px-1 overflow-x-auto flex-nowrap gap-3">
-      <SelectableButton 
-        label="Motoboy"
-        active={value === filters.MOTOBOY}
-        icon={Motorbike}
-        value="motoboy"
+      <SelectableButton
+        label="todos"
+        active={value === filters.ALL}
+        value="all"
         onClick={selectFilter}
       />
       <SelectableButton 
-        label="Carro"
-        active={value === filters.CAR}
-        icon={Car}
-        value="car"
+        label="Ônibus"
+        active={value === filters.BUS}
+        icon={BusFront}
+        value="bus"
+        onClick={selectFilter}
+      />
+      <SelectableButton 
+        label="Micro-ônibus"
+        active={value === filters.MINIBUS}
+        icon={Bus}
+        value="minibus"
         onClick={selectFilter}
       />
       <SelectableButton 
@@ -43,16 +49,10 @@ export default function VehicleTypeFilter({ value, onChange }: Props) {
         onClick={selectFilter}
       />
       <SelectableButton 
-        label="Caminhão"
-        active={value === filters.TRUCK}
-        icon={Truck}
-        value="truck"
-        onClick={selectFilter}
-      />
-      <SelectableButton
-        label="todos"
-        active={value === filters.ALL}
-        value="all"
+        label="Carro"
+        active={value === filters.CAR}
+        icon={Car}
+        value="car"
         onClick={selectFilter}
       />
     </div>
