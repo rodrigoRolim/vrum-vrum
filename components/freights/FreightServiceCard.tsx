@@ -1,0 +1,141 @@
+import { ArrowLeftRight, Building2, Bus, BusFront, CalendarClock, Car, Check, CheckCircle2, Fuel, Luggage, MessageCircle, User2, Users2, Van, Wifi } from "lucide-react";
+import Image from "next/image";
+import Tag from "../Tag";
+
+type VehicleType = 'car' | 'van' | 'bus' | 'minibus';
+type ServiceResource = { text: string; icon: React.ElementType };
+interface Company {
+  name: string;
+  location: string;
+  since: string;
+}
+interface Vehicle {
+  make: string;
+  capacity: number;
+  loadType: 'passenger' | 'cargo';
+  type: VehicleType;
+  model: string;
+  year: number;
+}
+interface Route {
+  origin: string;
+  destination: string;
+  isCovered: boolean;
+}
+interface Props {
+  title: string;
+  vehicle: Vehicle;
+  company: Company;
+  route: Route;
+  resources: ServiceResource[];
+  price: number | null;
+  isSubscription?: boolean;
+  src: string;
+}
+export default function FreightServiceCard({ title, vehicle, company, route, resources, price, isSubscription=false, src }: Props) {
+  const PHOTO_SIZE = 480;
+  const vehicleIconsMap: Record<VehicleType, React.ElementType> = {
+    car: Car,
+    van: Van,
+    bus: BusFront,
+    minibus: Bus
+  }
+  const vehicleTypeLabelsMap: Record<VehicleType, string> = {
+    car: "Carro",
+    van: "Van",
+    bus: "Ônibus",
+    minibus: "Micro-ônibus"
+  }
+  const Icon = vehicleIconsMap[vehicle.type] || null;
+  const IconButton = price ? MessageCircle : CalendarClock;
+  return (
+    <article className="flex flex-col w-fit bg-white rounded-md overflow-hidden shadow-lg max-w-120">
+      <header className="relative flex bg-gray-100">
+        <Image 
+          src={src}
+          className=""
+          width={PHOTO_SIZE}
+          height={PHOTO_SIZE}
+          alt=""
+        />
+        <div className="absolute px-2 pb-2 flex flex-col justify-end z-1 self-end text-white bg-linear-to-t from-black/54 to-black/5 h-full w-full">
+          {Icon &&
+            <span 
+              className="text-white text-xs flex gap-2 rounded-full size-fit font-medium items-end mb-1"
+            >
+              <Icon className="size-4.5"/> {vehicleTypeLabelsMap[vehicle.type]}
+            </span>
+          }
+          <h1 className="text-sm font-medium mb-1 truncate">{title}</h1>
+          <p className="text-xs font-light">{vehicle.model} • {vehicle.year} • {vehicle.capacity} {vehicle.loadType === 'cargo' ? 'toneladas de carga' : 'assentos'}</p>
+        </div>
+      </header>
+      <div className="flex flex-col p-4 gap-4">
+        <div className="flex gap-2">
+          <div className="bg-gray-200 size-9 flex place-items-center place-content-center rounded-md">
+            <Building2 className="size-6 text-gray-600"/>
+          </div>
+          <div className="flex flex-col">
+            <h2 className="text-sm font-semibold text-gray-900">{company.name}</h2>
+            <p className="text-xs text-gray-600">Sede: {company.location} • Desde {company.since}</p>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="flex gap-2">
+            <p className="text-sm text-gray-800">{route.origin}</p>
+            <div className="size-5 flex place-items-center place-content-center">
+              <ArrowLeftRight className="size-4 text-gray-500" />
+            </div>
+            <p className="text-sm text-gray-800">{route.destination}</p>
+          </div>
+          { route.isCovered && <div className="flex">
+            <Check className="size-4 text-green-600"/>
+            <p className="text-xs text-green-600">Atende a sua rota</p>
+          </div> }
+        </div>
+        <div className="flex gap-2">
+          <Users2 className="size-5 text-gray-600 mt-0.5"/>
+          <div className="flex flex-col">
+            <p className="text-sm text-gray-900">{vehicle.capacity} assentos</p>
+            <p className="text-gray-600 text-xs">Capacidade</p>
+          </div>
+        </div>
+        { resources.length > 0 && 
+          <div className="flex flex-col justify-center">
+            <h3 className="flex items-center gap-2 mb-2">
+              <CheckCircle2 className="size-4 text-blue-500"/><span className="text-sm">Inclui:</span>
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {resources.map((resource, index) => (
+                <Tag key={index} text={resource.text} icon={resource.icon} />
+              ))}
+            </div>  
+          </div> 
+        }
+      </div>
+      <footer className="flex flex-col md:flex-row gap-2 md:gap-0 justify-between p-4">
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-500">{ isSubscription ? 'Valor mensal' : 'Valor do frete'}</span>
+          <p className="text-lg font-medium">{price ? `R$ ${price.toFixed(2)}${isSubscription ? '/mês' : ''}` : 'Sob consulta'}</p>
+        </div>
+        <button className="flex gap-2 justify-center text-sm py-2 cursor-pointer bg-linear-to-r from-slate-500 to-slate-800 bg-clip-text">
+          <IconButton className="size-5"/> { price ? 'Solicitar serviço' :'Solicitar orçamento' }
+        </button>
+      </footer>
+    </article>
+  )
+}
+
+// marca • modelo • principal característica ou capacidade
+// Empresa • n veículos • Com ou sem CNPJ
+// Individual • 
+
+// van executiva luxo - conforto sobre rodas
+// Bancos de couro reclináveis
+// Frigobar abastecido
+// Tomadas individuais
+// capacidade para até 14 passageiros
+// Solicitar orçamento
+
+// Renotur
+// conforto e qualidade
