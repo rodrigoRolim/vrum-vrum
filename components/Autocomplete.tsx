@@ -56,7 +56,6 @@ export function Autocomplete<T extends BaseOption>({
   
   const containerRef = useRef<HTMLDivElement>(null);
 
-
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -72,8 +71,25 @@ export function Autocomplete<T extends BaseOption>({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  function selectWritenOption(query: string) {
+    onQuery(query);
+
+    if (query.length === 0) {
+      onSelectOption({ id: '', text: ''} as T);
+      return;
+    }
+
+    const match = options.find((option) => option.text === query);
+    if (match) {
+      onSelectOption(match);
+      return
+    }
+    
+    onSelectOption({ id: '', text: ''} as T);
+  }
+
   function selectOption(option: T) {
-    // onQuery(option);
+    onQuery(option.text);
     onSelectOption(option);
     setIsOpen(false);
   }
@@ -110,7 +126,7 @@ export function Autocomplete<T extends BaseOption>({
   return (
     <label className="flex flex-col gap-2">
       {label && 
-        <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        <span className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
           {label}
         </span>
       }
@@ -119,7 +135,7 @@ export function Autocomplete<T extends BaseOption>({
         <input
           {...props}
           type="text"
-          value={selected}
+          value={query}
           placeholder={placeholder}
           className={`flex w-full border bg-transparent pl-12 pr-18 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-14 rounded-xl border-slate-200 ${inputColorsMap[color]}`}
           role="combobox"
@@ -127,7 +143,7 @@ export function Autocomplete<T extends BaseOption>({
           aria-controls="city-listbox"
           onChange={(e) => {
             const value = e.target.value;
-            onQuery(value);
+            selectWritenOption(value);
             setHighlightedIndex(0);
             setIsOpen(value.length >= minChars);
           }}
