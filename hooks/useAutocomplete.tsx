@@ -34,7 +34,7 @@ export default function useAutocomplete<T>({
     }, delay)
 
     return () => clearTimeout(timeout)
-  }, [query, fetcher, minLength, delay])
+  }, [query, fetcher, delay])
 
   return { options, loading }
 }
