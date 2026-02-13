@@ -1,6 +1,5 @@
 import ExcursionCard from "@/components/excursion/ExcursionCard";
 import RouteCard from "@/components/RouteCard";
-import SchoolarTransportCard from "@/components/schoolar/SchoolarTransportCard";
 import TravelRoute from "@/components/TravelRoute";
 
 export default function RouteAvailables() {
@@ -15,7 +14,6 @@ export default function RouteAvailables() {
         vehicle="microbus"
       />
       <ExcursionCard />
-      <SchoolarTransportCard />
     </div>
   )
 }
