@@ -99,11 +99,17 @@ export default function Freights() {
             location: "São Paulo, SP",
             since: "1998",
           }}
-          route={{
+          routes={[{
+            id: '002',
             origin: "São Paulo, SP",
             destination: "Rio de Janeiro, RJ",
-            isCovered: true,
-          }}
+          }]}
+          coverageAreas={[{
+            id: '002',
+            origin: "São Paulo, SP",
+            radiusKm: 120
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: null, routeId: '002', by: 'route' }}
           resources={[
             { text: "Rastreamento em tempo real", icon: Map },
             { text: "Suporte 24/7", icon: Zap },
@@ -129,11 +135,17 @@ export default function Freights() {
             location: "Rio de Janeiro, RJ",
             since: "2005",
           }}
-          route={{
+          routes={[{
+            id: '001',
             origin: "Rio de Janeiro, RJ",
             destination: "São Paulo, SP",
-            isCovered: true,
-          }}
+          }]}
+          coverageAreas={[{
+            id: '001',
+            origin: "Rio de Janeiro, RJ",
+            radiusKm: 100
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: '001', routeId: null, by: 'coverage-area' }}
           resources={[
             { text: "Wi-Fi gratuito", icon: Wifi },
             { text: "Água e snacks", icon: Coffee },
@@ -159,11 +171,12 @@ export default function Freights() {
             location: "Belo Horizonte, MG",
             since: "1990",
           }}
-          route={{
+          routes={[{
+            id: '003',
             origin: "Belo Horizonte, MG",
             destination: "Vitória, ES",
-            isCovered: true,
-          }}
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: null, routeId: '003', by: 'route' }}
           resources={[
             { text: "Guia turístico", icon: Map },
             { text: "Seguro viagem", icon: Shield },
@@ -189,11 +202,12 @@ export default function Freights() {
             location: "Campinas, SP",
             since: "2010",
           }}
-          route={{
+          routes={[{
+            id: '004',
             origin: "Campinas, SP",
             destination: "Santos, SP",
-            isCovered: true,
-          }}
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: null, routeId: '004', by: 'route' }}
           resources={[
             { text: "Wi-Fi corporativo", icon: Wifi },
             { text: "Tomadas individuais", icon: Zap },
@@ -220,11 +234,17 @@ export default function Freights() {
             location: "São Paulo, SP",
             since: "2015",
           }}
-          route={{
+          routes={[{
+            id: '006',
             origin: "São Paulo, SP",
             destination: "Guarulhos, SP",
-            isCovered: true,
-          }}
+          }]}
+          coverageAreas={[{
+            id: '006',
+            origin: "São Paulo, SP",
+            radiusKm: 50
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: '006', routeId: null, by: 'both' }}
           resources={[
             { text: "Motorista particular", icon: User },
             { text: "Frigobar", icon: Snowflake },
@@ -252,7 +272,6 @@ export default function Freights() {
           route={{
             origin: "Curitiba, PR",
             destination: "Florianópolis, SC",
-            isCovered: true,
           }}
           resources={[
             { text: "2 ajudantes", icon: Users },
@@ -278,11 +297,12 @@ export default function Freights() {
             location: "Porto Alegre, RS",
             since: "2012",
           }}
-          route={{
+          routes={[{
+            id: '007',
             origin: "Porto Alegre, RS",
             destination: "Novo Hamburgo, RS",
-            isCovered: true,
-          }}
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: null, routeId: '007', by: 'route' }}
           resources={[
             { text: "Monitor capacitado", icon: User },
             { text: "GPS escolar", icon: Map },
@@ -309,11 +329,12 @@ export default function Freights() {
             location: "Salvador, BA",
             since: "1985",
           }}
-          route={{
+          coverageAreas={[{
+            id: '008',
             origin: "Salvador, BA",
-            destination: "Recife, PE",
-            isCovered: true,
-          }}
+            radiusKm: 200
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: '008', routeId: null, by: 'coverage-area' }}
           resources={[
             { text: "Poltrona leito", icon: Bed },
             { text: "Jantar incluso", icon: Utensils },
@@ -341,7 +362,6 @@ export default function Freights() {
           route={{
             origin: "Goiânia, GO",
             destination: "Brasília, DF",
-            isCovered: true,
           }}
           resources={[
             { text: "Rastreamento GPS", icon: Map },
@@ -368,11 +388,12 @@ export default function Freights() {
             location: "Fortaleza, CE",
             since: "2018",
           }}
-          route={{
-            origin: "Fortaleza, CE",
-            destination: "Sob Consulta",
-            isCovered: true,
-          }}
+          coverageAreas={[{
+            id: '009',
+            origin: 'Fortaleza, CE',
+            radiusKm: 100
+          }]}
+          driverMatch={{ value: 'COVERED', coverageAreaId: '009', routeId: null, by: 'coverage-area' }}
           resources={[
             { text: "Guia turístico", icon: Map },
             { text: "Paradas fotográficas", icon: Camera },
@@ -401,7 +422,6 @@ export default function Freights() {
           route={{
             origin: "Campo Grande, MS",
             destination: "São Paulo, SP",
-            isCovered: true,
           }}
           resources={[
             { text: "Veterinário acompanhante", icon: Heart },
@@ -434,7 +454,6 @@ export default function Freights() {
           route={{
             origin: "São Paulo, SP",
             destination: "São Bernardo, SP",
-            isCovered: true,
             distance: "25 km"
           }}
           resources={[
