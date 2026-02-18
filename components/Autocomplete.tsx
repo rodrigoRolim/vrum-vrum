@@ -137,7 +137,7 @@ export function Autocomplete<T extends BaseOption>({
           type="text"
           value={query}
           placeholder={placeholder}
-          className={`flex w-full border bg-transparent pl-12 pr-18 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-14 rounded-xl border-slate-200 ${inputColorsMap[color]}`}
+          className={`flex w-full border bg-transparent pl-12 pr-18 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-14 rounded-xl border-slate-200 ${inputColorsMap[color]} placeholder:text-sm`}
           role="combobox"
           aria-expanded={isOpen}
           aria-controls="city-listbox"
@@ -157,7 +157,9 @@ export function Autocomplete<T extends BaseOption>({
         {Button && 
           <button
             type="button"
-            className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 items-center text-orange-600 hover:text-orange-800 text-xs font-medium"><Button.icon className="size-5"/>
+            className="cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 items-center text-orange-600 hover:text-orange-800 text-xs font-medium"
+          >
+            <Button.icon className="size-5"/>
             {Button.text}
           </button>}
         {isOpen && options.length > 0 && (
@@ -171,7 +173,7 @@ export function Autocomplete<T extends BaseOption>({
                 key={option.id}
                 role="option"
                 aria-selected={highlightedIndex === index}
-                className={`cursor-pointer px-3 py-2 ${
+                className={`cursor-pointer px-3 py-2 text-sm ${
                   highlightedIndex === index
                     ? "bg-orange-100 text-orange-900"
                     : "hover:bg-gray-100"
