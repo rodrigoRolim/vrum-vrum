@@ -14,7 +14,6 @@ export default function SearchBySmallShipmentService() {
           </div>
         </div>
         <SearchCompanies />
-
       </div>
     </main>
   )
