@@ -145,7 +145,7 @@ export default function Freights() {
             origin: "Rio de Janeiro, RJ",
             radiusKm: 100
           }]}
-          driverMatch={{ value: 'COVERED', coverageAreaId: '001', routeId: null, by: 'coverage-area' }}
+          driverMatch={{ value: 'ON_CONSULTATION', coverageAreaId: '001', routeId: null, by: 'coverage-area' }}
           resources={[
             { text: "Wi-Fi gratuito", icon: Wifi },
             { text: "Água e snacks", icon: Coffee },
