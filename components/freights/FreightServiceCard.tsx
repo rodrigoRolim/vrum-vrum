@@ -105,8 +105,8 @@ function CoverageAreas({ coverageAreas, driverMatch }: { coverageAreas: Coverage
 
         {(driverMatch?.by === 'coverage-area' || driverMatch?.by === 'both') && driverMatch?.coverageAreaId === coverageArea.id && driverMatch?.value === 'ON_CONSULTATION' && (
           <div className="flex items-center gap-1 mt-2 text-yellow-700">
-            <MessageCircle className="size-3.5" />
-            <span className="text-xs">Sua localidade está na área de cobertura, consulte se sua rota é atendida</span>
+            <MessageCircleWarning className="size-3.5" />
+            <span className="text-xs">Sua rota está na área de cobertura, consulte se sua rota é atendida</span>
           </div>
         )}
       </div>
