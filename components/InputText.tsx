@@ -14,9 +14,9 @@ type Props = {
 
 export default function InputText({ label, icon: Icon, placeholder = "", error, button: Button, ...props }: Props) {
   return (
-    <label className="flex flex-col gap-2">
+    <label className="flex flex-col">
       {label && <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{label}</span>}
-      <div className="relative">
+      <div className="relative mt-2 mb-1">
         {Icon && <Icon className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"/>}
         <input
           {...props}
@@ -26,7 +26,9 @@ export default function InputText({ label, icon: Icon, placeholder = "", error, 
         />
         {Button && <button><Button.icon className="absolute right-3 top-3.5 text-orange-600 hover:text-orange-800 text-sm font-medium"/></button>}
       </div>
-      {error && <p className="text-sm text-red-500">{error.message}</p>}
+      <div className="flex h-4">
+        {error && <p className="text-xs text-red-500">{error.message}</p>}
+      </div>
     </label>
   )
 }
